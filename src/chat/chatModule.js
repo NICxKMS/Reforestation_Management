@@ -19,6 +19,15 @@ const chatModule = {
     },
 
     createForestContext(forest) {
+        if (forest.name === "forests") {
+            return {
+                name: "forests",
+                type: "all types",
+                context: "global",
+                focus: "general forest knowledge and conservation"
+            };
+        }
+
         return {
             name: forest.name,
             type: forest.type,
@@ -56,6 +65,10 @@ const chatModule = {
     },
 
     generateGreeting(forest) {
+        if (forest.name === "forests") {
+            return `Hello! I'm your AI forest expert. I can help you learn about forests around the world, their ecosystems, conservation efforts, and more.\n\nFeel free to ask me anything about forests!`;
+        }
+
         const facts = [
             forest.biodiversity.endangered.length > 3 ? 
                 `This forest is home to several endangered species, including the remarkable ${forest.biodiversity.endangered[0]} and ${forest.biodiversity.endangered[1]}.` : null,
@@ -81,7 +94,7 @@ const chatModule = {
 
     cleanup() {
         document.querySelector('.chat-container')?.remove();
-        document.getElementById('chat-trigger')?.classList.remove('active');
+        // Remove the chat trigger button state change
     },
 
     async setupEventListeners(container, forestContext, messages) {

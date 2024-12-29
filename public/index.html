@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Map</title>
+    <link rel="icon" href="https://img.icons8.com/color/48/000000/forest.png" type="image/png">
+    <title>Global Forest Explorer 🌳</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         html, body {
@@ -12,7 +13,7 @@
             padding: 0;
         }
         @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-            .top-bar, #forest-info {
+            #forest-info {
                 -webkit-backdrop-filter: blur(10px) saturate(180%);
                 backdrop-filter: blur(10px) saturate(180%);
             }
@@ -21,14 +22,41 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="top-bar">
-        <h1>Global Forest Explorer</h1>
-        <button class="toggle-btn" onclick="toggleTopBar()">▼</button>
+    <div class="floating-title">
+        <img src="https://img.icons8.com/color/48/000000/forest.png" alt="Forest Icon" class="title-icon">
+        <div class="title-content">
+            <h1>Global Forest Explorer</h1>
+            <div class="title-stats">
+                <span><i class="fas fa-tree"></i> 20+ Forests</span>
+                <span><i class="fas fa-globe"></i> 5+ Continents</span>
+            </div>
+        </div>
+        <button class="collapse-btn" onclick="toggleTitleBar()">
+            <i class="fas fa-chevron-up"></i>
+        </button>
     </div>
     <div id="map"></div>
     <div id="forest-info"></div>
+    <div class="footer-credit">
+        <div class="credit-main">
+            <img src="https://github.com/NICxKMS.png" alt="Nikhil Kumar" class="author-avatar">
+            <div class="credit-info">
+                <h3>Made by Nikhil Kumar</h3>
+                <p>Chandigarh University Student</p>
+            </div>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/NICxKMS/Reforestation_Management.git" target="_blank" class="action-link">
+                <i class="fab fa-github"></i> Project Code
+            </a>
+            <a href="https://github.com/NICxKMS?tab=followers" target="_blank" class="action-link">
+                <i class="fas fa-user-plus"></i> Follow
+            </a>
+        </div>
+    </div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="/script.js"></script>
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
 </body>
 </html>

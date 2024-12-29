@@ -12,13 +12,17 @@ body {
 /* Map container styling */
 #map {
     position: absolute;
-    top: 50px;
+    top: 0; /* Changed from 80px */
     left: 0;
     right: 0;
     bottom: 0;
     width: 100%;
     z-index: 1;
     transition: top 0.3s ease;
+}
+
+#map.collapsed {
+    top: 0; /* Changed from 50px */
 }
 
 html, body, #map {
@@ -28,80 +32,40 @@ html, body, #map {
     overflow: hidden;
 }
 
-/* Top bar styling */
-.top-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.8);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
-    backdrop-filter: blur(10px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    transform-origin: top;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* Remove all top bar related styles - start */
+/* Remove .top-bar and all related classes:
+.top-bar
+.title-section
+.title-container
+.title-icon
+.title-stats
+.stat-item
+.top-bar h1
+.top-bar-left
+.author-info (and its duplicates)
+.project-link
+.follow-btn
+.author-main
+.author-avatar
+.author-links
+.divider
+.institution
+*/
 
-.top-bar.collapsed {
-    transform: translateY(-35px);
-    opacity: 0.7;
-}
-
-.top-bar.collapsed:hover {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.top-bar:hover {
-    transform: translateY(0);
-}
-
-.top-bar.collapsed {
-    height: 30px;
-}
-
-.top-bar.collapsed h1 {
-    font-size: 1em;
-}
-
-.toggle-btn {
-    background: none;
-    border: none;
-    color: #2c3e50;
-    cursor: pointer;
-    padding: 5px;
-    font-size: 1.2em;
-}
-
-.toggle-btn:hover {
-    color: #27ae60;
-}
-
-.top-bar h1 {
-    font-size: 1.2em;
-    color: #2c3e50;
-    margin: 0;
-}
-
-/* Adjust forest info panel position */
+/* Continue with forest info panel styles */
 #forest-info {
     position: fixed;
-    top: 60px;  /* Moved down to account for top bar */
+    top: 10px;  /* Changed from 60px since there's no top bar */
     right: 10px;
-    background: rgba(255, 255, 255, 0.85);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
-    backdrop-filter: blur(10px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, rgba(232, 245, 238, 0.85), rgba(220, 239, 229, 0.9));
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 32px rgba(39, 174, 96, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
     z-index: 1000;
     max-width: 300px;
     min-width: 200px;
@@ -114,19 +78,18 @@ html, body, #map {
     will-change: transform;
     touch-action: none;
     cursor: grab;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
+#forest-info.visible {
     opacity: 1;
     visibility: visible;
-    left: auto; /* Remove left constraint */
-    right: 10px; /* Keep initial position on right */
-    transform: translate(0, 0);
-    will-change: transform;
-    transition: opacity 0.2s ease;
-    pointer-events: auto;
-    font-size: 14px;
-    line-height: 1.6;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    transform: translateX(0);
+    pointer-events: all; /* Re-enable interaction when visible */
 }
 
 #forest-info.hidden {
@@ -160,6 +123,9 @@ html, body, #map {
     user-select: none;
     -webkit-user-select: none;
     touch-action: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px 16px 0 0;
 }
 
 #forest-info.dragging #forest-info-header {
@@ -206,7 +172,7 @@ html, body, #map {
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    margin-top: 60px !important; /* Force position below top bar */
+    margin-top: 10px !important; /* Changed from 60px */
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     transition: opacity 0.3s ease;
@@ -227,11 +193,12 @@ html, body, #map {
 }
 
 #forest-info h3 {
-    color: #2c3e50;
+    color: #15502f;
     margin-top: 0;
     border-bottom: 2px solid #27ae60;
     padding-bottom: 8px;
     margin-bottom: 15px;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 
 #forest-info strong {
@@ -596,15 +563,6 @@ html, body, #map {
 }
 
 .chart-container {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    width: 80%;
-    max-width: 900px;
-    height: 80%;
-    max-height: 700px;
-    display: grid;
-    flex-direction: column;
     background: rgba(255, 255, 255, 0.98);
     padding: 30px;
     display: flex;
@@ -894,3 +852,289 @@ html, body, #map {
     margin-bottom: 15px;
     white-space: pre-line;
 }
+
+/* Footer Credit Styling */
+.footer-credit {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 247, 0.98));
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 
+        0 8px 32px rgba(39, 174, 96, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    z-index: 1000;
+    min-width: 280px;
+}
+
+.footer-credit a {
+    color: #27ae60;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease;
+}
+
+.footer-credit a:hover {
+    color: #219a52;
+}
+
+.footer-links {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85em;
+    margin-top: 3px;
+    padding-left: 24px;
+}
+
+.footer-links a {
+    color: #ffffff;
+}
+
+.footer-links a:hover {
+    color: #27ae60;
+}
+
+/* Enhance Footer Credit visibility */
+.footer-credit {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 20px;
+    border: 1px solid rgba(39, 174, 96, 0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Floating Title Bar */
+.floating-title {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(244, 250, 247, 0.95));
+    padding: 12px 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(39, 174, 96, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    backdrop-filter: blur(10px) saturate(180%);
+    border: 1px solid rgba(39, 174, 96, 0.15);
+    z-index: 1000;
+    background: linear-gradient(135deg, #e8f5ee, #dcefe5);
+    box-shadow: 0 4px 24px rgba(39, 174, 96, 0.1);
+    background: linear-gradient(135deg, rgba(232, 245, 238, 0.85), rgba(220, 239, 229, 0.9));
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 4px 24px rgba(39, 174, 96, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    padding: 15px 28px;
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floating-title.collapsed {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, rgba(232, 245, 238, 0.95), rgba(220, 239, 229, 0.98));
+}
+
+.floating-title.collapsed .title-stats {
+    display: none;
+}
+
+.floating-title.collapsed h1 {
+    font-size: 1em;
+}
+
+.collapse-btn {
+    background: none;
+    border: none;
+    color: #15502f;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    background: rgba(39, 174, 96, 0.1);
+}
+
+.collapse-btn:hover {
+    background: rgba(39, 174, 96, 0.2);
+}
+
+.floating-title.collapsed .collapse-btn i {
+    transform: rotate(180deg);
+}
+
+.floating-title .title-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.title-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.floating-title h1 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #1a5d3a;
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    color: #1a5d3a;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    color: #15502f;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.3px;
+}
+
+.title-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85em;
+    color: #2c7a52;
+    margin-top: 4px;
+    color: #3d8165;
+    color: #2d7a52;
+}
+
+.title-stats i {
+    color: #27ae60;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
+    color: #2d9a60;
+    filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.5));
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.9));
+}
+
+/* Enhanced Footer Credit */
+.footer-credit {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 247, 0.98));
+    padding: 22px;
+    border-radius: 20px;
+    box-shadow: 
+        0 8px 32px rgba(39, 174, 96, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    z-index: 1000;
+    min-width: 280px;
+    background: linear-gradient(135deg, #e8f5ee, #dcefe5);
+    box-shadow: 0 8px 32px rgba(39, 174, 96, 0.15);
+    background: linear-gradient(135deg, rgba(232, 245, 238, 0.85), rgba(220, 239, 229, 0.9));
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+        0 8px 32px rgba(39, 174, 96, 0.15),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    padding: 22px;
+    border-radius: 20px;
+}
+
+.credit-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.credit-main .author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid rgba(39, 174, 96, 0.2);
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.15);
+    border: 3px solid rgba(39, 174, 96, 0.2);
+    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 2px 8px rgba(39, 174, 96, 0.2),
+        0 0 0 1px rgba(39, 174, 96, 0.1);
+}
+
+.credit-info h3 {
+    margin: 0;
+    font-size: 1.1em;
+    color: #1a5d3a;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    color: #1a5d3a;
+    color: #15502f;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.2px;
+}
+
+.credit-info p {
+    margin: 4px 0 0;
+    font-size: 0.9em;
+    color: #2c7a52;
+    color: #3d8165;
+    color: #2d7a52;
+}
+
+.footer-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 0;
+}
+
+.action-link {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(to bottom, #2d9a60, #248c51);
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 
+        0 4px 12px rgba(39, 174, 96, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(39, 174, 96, 0.3);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: white;
+}
+
+.action-link:hover {
+    background: linear-gradient(to bottom, #2d9a60, #1d7a45);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 15px rgba(39, 174, 96, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.action-link i {
+    color: white;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+}
+
+/* If you want to differentiate between the two buttons */
+/* Remove or comment out:
+.action-link:nth-child(2) { ... }
+.action-link:nth-child(2):hover { ... }
+.action-link i { ... }
+.action-link:hover { ... }
+.action-link i { ... }
+*/
+
+/* ...rest of existing code... */

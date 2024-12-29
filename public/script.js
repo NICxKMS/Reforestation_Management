@@ -95,15 +95,35 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(infoDiv);
     }
     
-    // Ensure chat trigger button exists
+    // Create and show chat trigger button
     if (!document.getElementById('chat-trigger')) {
         const chatTrigger = document.createElement('button');
         chatTrigger.id = 'chat-trigger';
         chatTrigger.className = 'chat-trigger';
-        chatTrigger.innerHTML = '<span class="icon">💭</span>Chat about this forest';
+        chatTrigger.innerHTML = '<span class="icon">💭</span>Chat about forests';
+        chatTrigger.style.display = 'flex'; // Always visible
+        chatTrigger.onclick = () => startForestChat(); // Default handler
         document.body.appendChild(chatTrigger);
     }
     
+    setupTopBarBehavior();
+    setupDraggablePanel();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing code...
+    
+    // Initialize chat trigger with general forest chat
+    const chatTrigger = document.getElementById('chat-trigger') || document.createElement('button');
+    chatTrigger.id = 'chat-trigger';
+    chatTrigger.className = 'chat-trigger';
+    chatTrigger.innerHTML = '<span class="icon">💭</span>Chat about forests';
+    chatTrigger.style.display = 'flex';
+    chatTrigger.onclick = () => startForestChat();
+    if (!chatTrigger.parentElement) {
+        document.body.appendChild(chatTrigger);
+    }
+
     setupTopBarBehavior();
     setupDraggablePanel();
 });
@@ -112,16 +132,19 @@ function showForestDetails(forest) {
     const infoDiv = document.getElementById('forest-info');
     if (!infoDiv) return;
     
+    // Set visibility class first to trigger transition
+    infoDiv.classList.add('visible');
+    
     const metrics = calculateLocalMetrics(forest);
     
     infoDiv.style.transform = 'translate(0, 0)';
     infoDiv.style.display = 'block';
     infoDiv.style.opacity = '1';
     
-    // Update chat trigger button visibility and handler
+    // Update chat trigger text and handler for specific forest
     const chatTrigger = document.getElementById('chat-trigger');
     if (chatTrigger) {
-        chatTrigger.style.display = 'flex';
+        chatTrigger.innerHTML = `<span class="icon">💭</span>Chat about ${forest.name}`;
         chatTrigger.onclick = () => startForestChat(forest.id);
     }
     
@@ -440,13 +463,15 @@ window.closeForestInfo = function(e) {
     const chatTrigger = document.getElementById('chat-trigger');
     
     if (chatTrigger) {
-        chatTrigger.style.display = 'none';
-        chatTrigger.onclick = null; // Remove the click handler
+        chatTrigger.innerHTML = '<span class="icon">💭</span>Chat about forests';
+        chatTrigger.onclick = () => startForestChat(); // Reset to default handler
     }
     
     if (!infoDiv) return;
     
-    infoDiv.style.opacity = '0';
+    // Remove visible class to trigger fade out
+    infoDiv.classList.remove('visible');
+    
     setTimeout(() => {
         infoDiv.style.display = 'none';
         infoDiv.style.opacity = '1';
@@ -610,11 +635,32 @@ window.showDetailedTrends = function(data) {
 
 // Initialize the chat functionality
 window.startForestChat = function(forestId) {
-    const forest = forestDatabase.forests.find(f => f.id === forestId);
-    if (forest) {
-        chatModule.cleanup();
-        chatModule.initialize(forest);
+    let forest;
+    if (forestId) {
+        forest = forestDatabase.forests.find(f => f.id === forestId);
+    } else {
+        // Default forest context for general conversations
+        forest = {
+            name: "forests",
+            type: "various",
+            biodiversity: {
+                species: "numerous species worldwide",
+                endangered: ["various endangered species"],
+            },
+            conservation: {
+                status: "varying by region",
+            },
+            historicalData: {
+                primaryThreats: [
+                    { threat: "Deforestation", impact: "High", trend: "Varying by region" },
+                    { threat: "Climate Change", impact: "High", trend: "Increasing" }
+                ]
+            }
+        };
     }
+    
+    chatModule.cleanup();
+    chatModule.initialize(forest);
 };
 
 export {
