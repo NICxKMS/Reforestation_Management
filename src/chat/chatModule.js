@@ -5,9 +5,13 @@ const AUTHOR = {
     github: "https://github.com/NICxKMS"
 };
 
+const API_BASE = process.env.NODE_ENV === 'production' 
+    ? 'https://reforestation-management.onrender.com'
+    : '';
+
 const API_ENDPOINTS = {
-    CHAT: 'http://localhost:3000/api/chat',
-    MODELS: 'http://localhost:3000/api/models'
+    CHAT: `${API_BASE}/api/chat`,
+    MODELS: `${API_BASE}/api/models`
 };
 
 // Remove the duplicate ChatGPTStreamFormatter class definition
