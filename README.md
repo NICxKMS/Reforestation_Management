@@ -17,7 +17,7 @@
   </div>
   <br/>
 
-  [![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/NICxKMS/forest-explorer/releases)
+  [![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/NICxKMS/forest-explorer/releases)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
   [![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](package.json)
