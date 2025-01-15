@@ -106,14 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.appendChild(chatTrigger);
     }
     
-    setupTopBarBehavior();
     setupDraggablePanel();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
     // Consolidated initialization code
     const setupUI = () => {
-        setupTopBarBehavior();
         setupDraggablePanel();
         initializeChatTrigger();
     };
@@ -503,60 +501,7 @@ window.zoomToForest = function(coords, radius) {
     });
 };
 
-// Add top bar toggle functionality
-window.toggleTopBar = function() {
-    const topBar = document.querySelector('.top-bar');
-    const map = document.getElementById('map');
-    const isCollapsed = topBar.classList.toggle('collapsed');
-    
-    // Update map container position
-    map.style.top = isCollapsed ? '30px' : '50px';
-    map.invalidateSize();
-};
-
 // Update the auto-collapse behavior
-function setupTopBarBehavior() {
-    const topBar = document.querySelector('.top-bar');
-    let isMouseNear = false;
-    let collapseTimer;
-
-    function scheduleCollapse() {
-        clearTimeout(collapseTimer);
-        if (!isMouseNear) {
-            collapseTimer = setTimeout(() => {
-                topBar.classList.add('collapsed');
-            }, 3000); // Wait 3 seconds before collapsing
-        }
-    }
-
-    // Initialize collapsed state
-    setTimeout(() => {
-        topBar.classList.add('collapsed');
-    }, 5000); // Initial collapse after 5 seconds
-
-    document.addEventListener('mousemove', (e) => {
-        isMouseNear = e.clientY <= 100;
-        if (isMouseNear) {
-            topBar.classList.remove('collapsed');
-            clearTimeout(collapseTimer);
-        } else {
-            scheduleCollapse();
-        }
-    });
-
-    // Prevent collapse while interacting with top bar
-    topBar.addEventListener('mouseenter', () => {
-        clearTimeout(collapseTimer);
-        isMouseNear = true;
-        topBar.classList.remove('collapsed');
-    });
-
-    topBar.addEventListener('mouseleave', () => {
-        isMouseNear = false;
-        scheduleCollapse();
-    });
-}
-
 // Simplified setupDraggablePanel:
 function setupDraggablePanel() {
     const forestInfo = document.getElementById('forest-info');
@@ -625,7 +570,6 @@ function calculateLocalMetrics(forest) {
 
 // Initialize all features
 document.addEventListener('DOMContentLoaded', () => {
-    setupTopBarBehavior();
     setupDraggablePanel();
 });
 

@@ -105,6 +105,7 @@ html, body, #map {
     opacity: 0.95;
     box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     cursor: grabbing;
+    -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
     transition: none;
@@ -121,8 +122,8 @@ html, body, #map {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
     touch-action: none;
     background: rgba(255, 255, 255, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
@@ -176,7 +177,9 @@ html, body, #map {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
     margin-top: 10px !important; /* Changed from 60px */
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+
     border: 1px solid rgba(255, 255, 255, 0.3);
     transition: opacity 0.3s ease;
 }
@@ -554,8 +557,8 @@ html, body, #map {
     align-items: center;
     justify-content: center;
     z-index: 2000;
-    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     align-items: center;
@@ -883,6 +886,7 @@ html, body, #map {
 
 /* Chat button styling */
 .chat-trigger {
+    max-width:27%;
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -893,7 +897,7 @@ html, body, #map {
     border-radius: 25px;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    display: none; /* Changed from flex to none as default */
+    display: -webkit-box; /* Changed from flex to none as default */
     align-items: center;
     gap: 8px;
     font-size: 16px;
@@ -945,8 +949,8 @@ html, body, #map {
     left: 20px;
     bottom: 20px;
     background: linear-gradient(135deg, rgba(232, 245, 238, 0.85), rgba(220, 239, 229, 0.9));
-    backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 
         0 8px 32px rgba(39, 174, 96, 0.15),
@@ -996,6 +1000,7 @@ html, body, #map {
 
 /* Floating Title Bar */
 .floating-title {
+    /* max-height:4%; */
     position: fixed;
     top: 20px;
     left: 50%;
@@ -1014,8 +1019,8 @@ html, body, #map {
     background: linear-gradient(135deg, #e8f5ee, #dcefe5);
     box-shadow: 0 4px 24px rgba(39, 174, 96, 0.1);
     background: linear-gradient(135deg, rgba(232, 245, 238, 0.85), rgba(220, 239, 229, 0.9));
-    backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 
         0 4px 24px rgba(39, 174, 96, 0.15),
@@ -1025,41 +1030,8 @@ html, body, #map {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.floating-title.collapsed {
-    padding: 8px 20px;
-    background: linear-gradient(135deg, rgba(232, 245, 238, 0.95), rgba(220, 239, 229, 0.98));
-}
-
-.floating-title.collapsed .title-stats {
-    display: none;
-}
-
-.floating-title.collapsed h1 {
-    font-size: 1em;
-}
-
 .collapse-btn {
-    background: none;
-    border: none;
-    color: #15502f;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 10px;
-    transition: all 0.3s ease;
-    background: rgba(39, 174, 96, 0.1);
-}
-
-.collapse-btn:hover {
-    background: rgba(39, 174, 96, 0.2);
-}
-
-.floating-title.collapsed .collapse-btn i {
-    transform: rotate(180deg);
+    display: none; /* Hide collapse button */
 }
 
 .floating-title .title-icon {
@@ -1085,29 +1057,79 @@ html, body, #map {
     letter-spacing: 0.3px;
 }
 
+/* Desktop title stats styling */
 .title-stats {
     display: flex;
     gap: 15px;
     font-size: 0.85em;
-    color: #2c7a52;
-    margin-top: 4px;
-    color: #3d8165;
     color: #2d7a52;
+    margin-top: 4px;
+    visibility: visible; /* Make sure stats are visible */
+    opacity: 1;
+}
+
+/* Title stats styling for desktop */
+.title-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85em;
+    color: #2d7a52;
+    margin-top: 4px;
+    visibility: visible;
+}
+
+.title-stats span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .title-stats i {
     color: #27ae60;
-    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
-    color: #2d9a60;
-    filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.5));
+    font-size: 1.1em;
     filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.9));
+}
+
+.title-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.85em;
+    color: #2d7a52;
+    margin-top: 4px;
+}
+
+.title-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.title-stats i {
+    color: #27ae60;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.9));
+}
+
+/* Mobile adjustments - only hide in mobile */
+@media screen and (max-width: 768px) {
+    .title-stats {
+        display: none;
+    }
+    /* ...rest of existing mobile styles... */
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+    .title-stats {
+        display: none !important; /* Force hide in mobile */
+    }
+    /* ...rest of existing mobile styles... */
 }
 
 /* Enhanced Footer Credit */
 .footer-credit {
     position: fixed;
     left: 20px;
-    bottom: 20px;
+    /* bottom: 20px; */
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 247, 0.98));
     padding: 22px;
     border-radius: 20px;
@@ -1122,8 +1144,8 @@ html, body, #map {
     background: linear-gradient(135deg, #e8f5ee, #dcefe5);
     box-shadow: 0 8px 32px rgba(39, 174, 96, 0.15);
     background: linear-gradient(135deg, rgba(232, 245, 238, 0.85), rgba(220, 239, 229, 0.9));
-    backdrop-filter: blur(12px) saturate(180%);
     -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 
         0 8px 32px rgba(39, 174, 96, 0.15),
@@ -1398,3 +1420,170 @@ html, body, #map {
 .bot-message details[class="tip"] {
     background: rgba(46, 204, 113, 0.05);
 }
+
+/* Mobile Responsive Adjustments */
+@media screen and (max-width: 768px) {
+    /* Adjust floating title for mobile */
+    .floating-title {
+        /* width: calc(100% - 40px); */
+        margin: 10px auto;
+        padding: 10px 15px;
+    }
+
+    .title-stats {
+        flex-wrap: wrap;
+        font-size: 0.75em;
+    }
+
+    /* Adjust footer credit for mobile */
+    .footer-credit {
+        /* left: 50%; */
+        /* transform: translateX(-50%); */
+        /* min-width: 300px; */
+        /* max-width: 70%; */
+        /* bottom: 80px; */ /* Place above chat button */
+        padding: 15px;
+        display: inline-block;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    .credit-main {
+        /* flex-direction: column; */
+        text-align: center;
+        gap: 10px;
+    }
+
+
+
+    .action-link {
+        padding: 8px 15px;
+        font-size: 0.85em;
+    }
+
+    /* Ensure chat button stays on top */
+    .chat-trigger {
+        /* max-width:25%; */
+        z-index: 2001;
+        /* bottom: 15px; */
+        /* right: 15px; */
+    }
+
+    /* Adjust chat container for mobile */
+    .chat-container {
+        width: calc(100% - 30px);
+        max-width: none;
+        height: calc(100% - 180px);
+        bottom: 80px;
+        right: 15px;
+    }
+
+    /* Adjusted Footer Credit */
+    .footer-credit {
+        transform: scale(0.9);
+        transform-origin: left bottom;
+        /* max-width: 65%; */
+        padding: 10px;
+        /* margin-bottom: 5px; */
+    }
+
+    /* Smaller credit main section */
+    .credit-main {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .credit-main .author-avatar {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Compact footer links */
+    .footer-links {
+        gap: 4px;
+    }
+
+    .action-link {
+        padding: 6px 8px;
+        font-size: 0.7em;
+        white-space: nowrap;
+    }
+
+    /* Adjusted Chat Button */
+    .chat-trigger {
+        max-width: 25%;
+        padding: 8px 12px;
+        font-size: 0.9em;
+        /* bottom: 15px; */
+        right: 2.4%;
+        transform: scale(0.9);
+        transform-origin: right bottom;
+    }
+
+    /* Prevent overlapping by adjusting positions */
+    @media screen and (max-height: 600px) {
+
+        .chat-trigger {
+            bottom: 15px;
+        }
+    }
+}
+
+/* Extra small screens */
+@media screen and (max-width: 360px) {
+    .footer-credit {
+        transform: scale(0.7);
+        /* max-width: 60%; */
+        margin-left: -3%;
+    }
+
+    .chat-trigger {
+        transform: scale(0.85);
+        max-width: 22%;
+        /* white-space: nowrap; */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Small mobile adjustments */
+@media screen and (max-width: 480px) {
+    .floating-title h1 {
+        font-size: 1em;
+        display: inline-block;  /* Keeps the content inline */
+        white-space: nowrap;  /* Prevents wrapping to the next line */
+        overflow: hidden;  /* Hides overflow if the content is too wide */
+        text-overflow: ellipsis;  /* Adds "..." if the content overflows */
+    }
+}
+
+    .title-stats {
+        display: inline-flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-content: stretch;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+
+    .footer-credit {
+        /* max-width: 40%; */
+        padding: 12px;
+        /* bottom: 70px; */
+        /* max-height: 15%; */
+        /* margin-left: -3%; */
+    }
+
+    .credit-main .author-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .credit-info h3 {
+        font-size: 0.9em;
+    }
+
+    .credit-info p {
+        font-size: 0.8em;
+    }
