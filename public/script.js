@@ -111,21 +111,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    // ...existing code...
-    
-    // Initialize chat trigger with general forest chat
-    const chatTrigger = document.getElementById('chat-trigger') || document.createElement('button');
-    chatTrigger.id = 'chat-trigger';
-    chatTrigger.className = 'chat-trigger';
-    chatTrigger.innerHTML = '<span class="icon">💭</span>Chat about forests';
-    chatTrigger.style.display = 'flex';
-    chatTrigger.onclick = () => startForestChat();
-    if (!chatTrigger.parentElement) {
-        document.body.appendChild(chatTrigger);
-    }
+    // Consolidated initialization code
+    const setupUI = () => {
+        setupTopBarBehavior();
+        setupDraggablePanel();
+        initializeChatTrigger();
+    };
 
-    setupTopBarBehavior();
-    setupDraggablePanel();
+    const initializeChatTrigger = () => {
+        const chatTrigger = document.getElementById('chat-trigger') || createChatTrigger();
+        if (!chatTrigger.parentElement) {
+            document.body.appendChild(chatTrigger);
+        }
+    };
+
+    setupUI();
 });
 
 function showForestDetails(forest) {

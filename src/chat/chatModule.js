@@ -1,16 +1,21 @@
+import { ChatGPTStreamFormatter, formatStreamedContent } from '../chat/chatFormatter.js';
+
 const AUTHOR = {
     name: "Nikhil Kumar",
     github: "https://github.com/NICxKMS"
 };
 
 const API_ENDPOINTS = {
-    CHAT: 'http://localhost:3000/api/chat'
+    CHAT: 'http://localhost:3000/api/chat',
+    MODELS: 'http://localhost:3000/api/models'
 };
+
+// Remove the duplicate ChatGPTStreamFormatter class definition
 
 const chatModule = {
     async initialize(forest) {
         const forestContext = this.createForestContext(forest);
-        const chatContainer = this.createChatUI(forest);
+        const chatContainer = await this.createChatUI(forest);
         document.body.appendChild(chatContainer);
         
         const messages = chatContainer.querySelector('.chat-messages');
@@ -42,13 +47,38 @@ const chatModule = {
         };
     },
 
-    createChatUI(forest) {
+    async createChatUI(forest) {
         const container = document.createElement('div');
         container.className = 'chat-container';
+        
+        // Fetch available models
+        let models = [];
+        try {
+            const response = await fetch(API_ENDPOINTS.MODELS);
+            if (!response.ok) throw new Error('Failed to fetch models');
+            models = await response.json();
+            console.log('Available models:', models); // Debug log
+        } catch (error) {
+            console.error('Error fetching models:', error);
+            models = [
+                { id: 'gpt-3.5-turbo', name: 'GPT-3.5 Turbo (Default)', isDefault: true },
+                { id: 'gpt-4o-mini', name: 'GPT-4-0 Mini (Fast)', isDefault: false }
+            ];
+        }
+
         container.innerHTML = `
             <div class="chat-header">
                 <div class="chat-header-content">
                     <h3>Chat about ${forest.name}</h3>
+                    <div class="model-selector">
+                        <select class="model-dropdown">
+                            ${models.map(model => 
+                                `<option value="${model.id}" ${model.isDefault ? 'selected' : ''}>
+                                    ${model.name}
+                                </option>`
+                            ).join('')}
+                        </select>
+                    </div>
                     <div class="author-info">
                         <span>Created by <a href="${AUTHOR.github}" target="_blank">${AUTHOR.name}</a></span>
                     </div>
@@ -101,27 +131,68 @@ const chatModule = {
         const input = container.querySelector('.chat-input');
         const sendBtn = container.querySelector('.chat-send');
         const closeBtn = container.querySelector('.chat-close');
+        const modelSelect = container.querySelector('.model-dropdown');
 
         const sendMessage = async () => {
             const message = input.value.trim();
             if (!message) return;
 
-            this.addMessage('user', message, messages);
             input.value = '';
+            input.disabled = true;
+            sendBtn.disabled = true;
+
+            // Add user message
+            this.addMessage('user', message, messages);
+
+            // Create bot message with loading
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot-message typing';
+            botMessageDiv.innerHTML = '<div class="typing-indicator"></div>';
+            messages.appendChild(botMessageDiv);
+            messages.scrollTop = messages.scrollHeight;
 
             try {
-                const response = await fetch('http://localhost:3000/api/chat', {
+                const response = await fetch(API_ENDPOINTS.CHAT, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message, forestContext })
+                    body: JSON.stringify({
+                        message,
+                        forestContext,
+                        model: modelSelect.value
+                    })
                 });
 
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                this.addMessage('bot', data.response, messages);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                botMessageDiv.className = 'message bot-message';
+                const formatter = new ChatGPTStreamFormatter(botMessageDiv);
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) {
+                        console.log('Chat session completed');
+                        break;
+                    }
+                    
+                    const chunk = decoder.decode(value);
+                    formatter.processChunk(chunk);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+
             } catch (error) {
-                console.error('Error:', error);
-                this.addMessage('bot', 'Sorry, I encountered an error. Please try again.', messages);
+                console.error('Chat error:', error);
+                botMessageDiv.className = 'message bot-message';
+                botMessageDiv.textContent = 'Sorry, I encountered an error. Please try again.';
+            } finally {
+                input.disabled = false;
+                sendBtn.disabled = false;
+                input.focus();
+                messages.scrollTop = messages.scrollHeight;
             }
         };
 

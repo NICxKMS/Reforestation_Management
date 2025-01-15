@@ -20,6 +20,17 @@
         }
     </style>
     <link rel="stylesheet" href="styles.css">
+    <!-- Add these scripts in this order -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script>
+        // Initialize highlight.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.configure({ ignoreUnescapedHTML: true });
+        });
+    </script>
 </head>
 <body>
     <div class="floating-title">
@@ -31,7 +42,7 @@
                 <span><i class="fas fa-globe"></i> 5+ Continents</span>
             </div>
         </div>
-        <button class="collapse-btn" onclick="toggleTitleBar()">
+        <button class="collapse-btn" onclick="toggleTitleBar()" aria-label="Toggle title bar">
             <i class="fas fa-chevron-up"></i>
         </button>
     </div>
@@ -46,10 +57,10 @@
             </div>
         </div>
         <div class="footer-links">
-            <a href="https://github.com/NICxKMS/Reforestation_Management.git" target="_blank" class="action-link">
+            <a href="https://github.com/NICxKMS/Reforestation_Management.git" target="_blank" rel="noopener noreferrer" class="action-link">
                 <i class="fab fa-github"></i> Project Code
             </a>
-            <a href="https://github.com/NICxKMS?tab=followers" target="_blank" class="action-link">
+            <a href="https://github.com/NICxKMS?tab=followers" target="_blank" rel="noopener noreferrer" class="action-link">
                 <i class="fas fa-user-plus"></i> Follow
             </a>
         </div>
