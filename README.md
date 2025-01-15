@@ -52,7 +52,7 @@ Global Forest Explorer is an advanced platform that combines real-time satellite
 1. **Clone the repository**
 ```bash
 git clone https://github.com/NICxKMS/Reforestation_Management.git
-cd forest-explorer
+cd Reforestation_Management
 ```
 
 2. **Install dependencies**
