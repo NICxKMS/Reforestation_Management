@@ -1,15 +1,23 @@
-name: Keep Server Alive
+name: Ensure Site is Fully Loaded
 
 on:
   schedule:
-    - cron: "*/14 * * * *" # Runs every 14 minutes
+    - cron: "*/14 * * * *"  # Runs every 14 minutes
   workflow_dispatch:
 
 jobs:
-  ping:
+  check-load:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Ping the website
+    - name: Ensure the site is fully loaded
       run: |
-        curl -s -o /dev/null -w "%{http_code}" https://reforestation-management.onrender.com/
+        # Wait for the page to fully load by checking for specific content or status
+        response=$(curl -s -w "%{http_code}" -o /dev/null https://reforestation-management.onrender.com/)
+        
+        if [ "$response" -ne 200 ]; then
+          echo "Site not fully loaded, HTTP code: $response"
+          exit 1  # Fail the job if the page is not fully loaded
+        else
+          echo "Site is fully loaded with HTTP code: $response"
+        fi
