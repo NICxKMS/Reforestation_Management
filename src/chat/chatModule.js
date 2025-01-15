@@ -6,8 +6,8 @@ const AUTHOR = {
 };
 
 const API_ENDPOINTS = {
-    CHAT: 'http://localhost:3000/api/chat',
-    MODELS: 'http://localhost:3000/api/models'
+    CHAT: 'https://reforestation-management.onrender.com/api/chat',
+    MODELS: 'https://reforestation-management.onrender.com/api/models'
 };
 
 // Remove the duplicate ChatGPTStreamFormatter class definition
