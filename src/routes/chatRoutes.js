@@ -61,4 +61,4 @@ async function handleChatRequest(req, res, next) {
 // Single route handler for chat
 router.post('/chat', validateChatRequest, handleChatRequest);
 
-export default router;
+export {router as default};
