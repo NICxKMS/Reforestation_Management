@@ -2,7 +2,7 @@ name: Ensure Site is Fully Loaded
 
 on:
   schedule:
-    - cron: "*/14 * * * *"  # Runs every 14 minutes
+    - cron: "*/13 * * * *"  # Runs every 14 minutes
   workflow_dispatch:
 
 jobs:
