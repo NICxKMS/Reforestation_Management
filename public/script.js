@@ -1,5 +1,4 @@
 import { forestDatabase, forestDataHelpers } from './forestData.js';
-import { chatModule } from './chat/chatModule.js';
 
 // Map Core Configuration and Setup
 const map = L.map('map', {
@@ -583,34 +582,30 @@ window.showDetailedTrends = function(data) {
     createLossChart(data);
 };
 
-// Initialize the chat functionality
+// Initialize the chat functionality using external static chat site
 window.startForestChat = function(forestId) {
-    let forest;
-    if (forestId) {
-        forest = forestDatabase.forests.find(f => f.id === forestId);
-    } else {
-        // Default forest context for general conversations
-        forest = {
-            name: "forests",
-            type: "various",
-            biodiversity: {
-                species: "numerous species worldwide",
-                endangered: ["various endangered species"],
-            },
-            conservation: {
-                status: "varying by region",
-            },
-            historicalData: {
-                primaryThreats: [
-                    { threat: "Deforestation", impact: "High", trend: "Varying by region" },
-                    { threat: "Climate Change", impact: "High", trend: "Increasing" }
-                ]
-            }
-        };
-    }
-    
-    chatModule.cleanup();
-    chatModule.initialize(forest);
+    // Remove any existing chat window
+    const existing = document.getElementById('external-chat-window');
+    if (existing) existing.remove();
+
+    // Build forest query parameter if given
+    const forestParam = forestId ? `?forest=${encodeURIComponent(forestId)}` : '';
+    const iframeSrc = `https://chat-api-9ru.pages.dev/${forestParam}`;
+
+    // Create container for external chat
+    const container = document.createElement('div');
+    container.id = 'external-chat-window';
+    container.className = 'external-chat';
+    container.innerHTML = `
+      <div class="chat-header">
+        <button class="close-chat-btn">&times;</button>
+      </div>
+      <iframe src="${iframeSrc}" allow="clipboard-read;clipboard-write"></iframe>
+    `;
+    document.body.appendChild(container);
+
+    // Close button handler
+    container.querySelector('.close-chat-btn').addEventListener('click', () => container.remove());
 };
 
 export {
