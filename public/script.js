@@ -85,6 +85,12 @@ const AUTHOR = {
     github: "https://github.com/NICxKMS"
 };
 
+// API endpoints (relative paths)
+const API_ENDPOINTS = {
+    CHAT: '/api/chat',
+    MODELS: '/api/models'
+};
+
 // Ensure forest info div exists
 document.addEventListener('DOMContentLoaded', () => {
     // Create forest info div if it doesn't exist

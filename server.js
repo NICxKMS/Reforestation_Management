@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import compression from 'compression';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import chatRoutes from './src/routes/chatRoutes.js';
@@ -14,10 +15,13 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(compression());
 
-// Serve static files from src/chat for modules
-app.use('/chat', express.static(path.join(__dirname, 'src/chat')));
+// Serve static assets with caching headers
+app.use(express.static('public', { maxAge: '1d', etag: true }));
+
+// Serve static chat modules with caching headers
+app.use('/chat', express.static(path.join(__dirname, 'src/chat'), { maxAge: '1d', etag: true }));
 
 // Routes
 app.get('/', (req, res) => {
