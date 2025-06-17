@@ -114,23 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDraggablePanel();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Consolidated initialization code
-    const setupUI = () => {
-        setupDraggablePanel();
-        initializeChatTrigger();
-    };
-
-    const initializeChatTrigger = () => {
-        const chatTrigger = document.getElementById('chat-trigger') || createChatTrigger();
-        if (!chatTrigger.parentElement) {
-            document.body.appendChild(chatTrigger);
-        }
-    };
-
-    setupUI();
-});
-
 function showForestDetails(forest) {
     const infoDiv = document.getElementById('forest-info');
     if (!infoDiv) return;
